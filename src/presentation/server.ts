@@ -28,13 +28,13 @@ export class Server {
 
     this.app.get('*', (req, res) => {
       
-      const indexPath = path.join(__dirname + "../../../public/index.html" );
+      const indexPath = path.join(__dirname + `../../../${ this.publicPath }/index.html` );
       res.sendFile( indexPath );
       
     });
 
     this.app.listen( this.port, () => {
-      console.log('Server is running on port 8080');
+      console.log(`Server is running on port ${ this.port }`);
     });
 
   }

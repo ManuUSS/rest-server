@@ -1,3 +1,4 @@
+import { envs } from './config/envs';
 import { Server } from './presentation/server';
 
 (() => {
@@ -11,7 +12,10 @@ import { Server } from './presentation/server';
 function main () {
   console.log('main');
 
-  const server = new Server( 'public' );
+  const server = new Server({
+    port: envs.port,
+    publicPath: envs.publicPath,
+  });
 
   server.start();
 
