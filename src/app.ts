@@ -3,8 +3,6 @@ import fs from 'fs';
 
 const server = http.createServer(( req, res ) => {
 
-  console.log( req.url );
-
   // Server Side rendering of HTML
   // res.writeHead( 200, { 'Content-Type': 'text/html' } );
   // res.write('<h1>Hello World</h1>');
@@ -23,11 +21,19 @@ const server = http.createServer(( req, res ) => {
     const htmlFile = fs.readFileSync( './public/index.html', 'utf-8' );
     res.writeHead( 200, { 'Content-Type': 'text/html' } );
     res.end( htmlFile );
-  } else {
-    res.writeHead( 404, { 'Content-Type': 'text/html' } );
-    res.end( '<h1>404 Page Not Found</h1>' );
+    return;
   }
 
+  if( req.url?.endsWith( '.js' ) ) {
+    res.writeHead( 200, { 'Content-Type': 'application/javascript' } );
+  }
+
+  if( req.url?.endsWith( '.css' ) ) {
+    res.writeHead( 200, { 'Content-Type': 'text/css' } );
+  }
+
+  const content = fs.readFileSync(`./public${req.url}`, 'utf-8');
+  res.end( content );
 
 });
 
