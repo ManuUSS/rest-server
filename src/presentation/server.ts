@@ -1,20 +1,30 @@
 import express from 'express';
 import path from 'path';
 
+interface ServerProps {
+  port: number;
+  publicPath?: string;
+};
 
 export class Server {
 
   private app = express();
+  private readonly port: number;
+  private readonly publicPath: string;
 
+  constructor(options: ServerProps) {
+    
+    const { port, publicPath = 'public' } = options;
 
-  constructor(
-    private staticAsset: string,
-  ) {}
+    this.port = port;
+    this.publicPath = publicPath;
 
+  }
+  
   async start () {
     
 
-    this.app.use( express.static( this.staticAsset ) );
+    this.app.use( express.static( this.publicPath ) );
 
     this.app.get('*', (req, res) => {
       
@@ -23,7 +33,7 @@ export class Server {
       
     });
 
-    this.app.listen( 8080, () => {
+    this.app.listen( this.port, () => {
       console.log('Server is running on port 8080');
     });
 
