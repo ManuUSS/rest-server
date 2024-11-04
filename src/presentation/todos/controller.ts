@@ -1,4 +1,4 @@
-import { Application, Request, Response } from 'express';
+import type { Request, Response } from 'express';
 
 const todos = [
   { id: 1, title: 'Todo 1', completed: false },
@@ -33,10 +33,18 @@ export class TodosController {
 
   public createTodo = ( req:Request, res:Response ) => {
     
+    const { title, completed = false } = req.body;
     
-    const body = req.body;
+    if( !title ) {
+      res.status( 400 ).json({ message: 'Title is required' });
+      return;
+    }
 
-    res.json( todos );
+    const newTodo = { id: todos.length + 1, title, completed };
+
+    todos.push( newTodo );
+
+    res.json( newTodo );
 
   }
 
