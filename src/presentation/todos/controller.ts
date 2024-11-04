@@ -6,12 +6,23 @@ export class TodosController {
 
   constructor () {};
 
+  /**
+   * Get all todos
+   * @async
+   * @param { Request } req 
+   * @param { Response } res 
+   */
   public getTodos = async ( req:Request, res:Response ) => {
-
     const todos = await prisma.todo.findMany();
     res.json( todos );
   };
 
+  /**
+   * Get todo by id
+   * @async
+   * @param { Request } req 
+   * @param { Response } res 
+   */
   public getTodoById = async ( req:Request, res:Response ) => {
     const id = Number( req.params.id );
 
@@ -32,6 +43,12 @@ export class TodosController {
 
   };
 
+  /**
+   * Create a new todo
+   * @async
+   * @param { Request } req 
+   * @param { Response } res 
+   */
   public createTodo = async ( req:Request, res:Response ) => {
     
     const { text } = req.body;
@@ -51,6 +68,12 @@ export class TodosController {
 
   };
 
+  /**
+   * Update a todo
+   * @async
+   * @param { Request } req 
+   * @param { Response } res 
+   */
   public updateTodo = async ( req:Request, res:Response ) => {
   
     const id = Number( req.params.id );
@@ -59,8 +82,6 @@ export class TodosController {
       return;
     }
 
-
-
     const todo = await prisma.todo.findUnique({ where: { id } });
     if( !todo ) {
       res.status( 404 ).json({ message: 'Todo not found' });
@@ -68,18 +89,24 @@ export class TodosController {
     }
 
     const { text, completedAt } = req.body;
-    if( !text ) {
-      res.status( 400 ).json({ message: 'Text is required' });
-      return;
-    }
+    const updatedTodo = await prisma.todo.update({
+      where: { id },
+      data: {
+        text,
+        completedAt: completedAt ? new Date( completedAt ) : null
+      }
+    });
 
-    todo.text = text;
-    todo.completedAt = completedAt || todo.completedAt;
-
-    res.json( todo );
+    res.json( updatedTodo );
 
   };
 
+  /**
+   * Delete a todo
+   * @async
+   * @param { Request } req 
+   * @param { Response } res 
+   */
   public deleteTodo = async ( req:Request, res:Response ) => {
       
       const id = Number( req.params.id );
@@ -88,13 +115,15 @@ export class TodosController {
         return;
       }
       
-      const todo = await prisma.todo.delete({ where: { id } });
+      const todo = await prisma.todo.findUnique({ where: { id } });
       if( !todo ) {
         res.status( 404 ).json({ message: 'Todo not found' });
         return;
       }
-      
-      res.json( todo );
+
+      const deletedTodo = await prisma.todo.delete({ where: { id } });
+
+      res.json({ todo, deletedTodo });
   
   };
 
