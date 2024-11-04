@@ -31,6 +31,14 @@ export class TodosController {
 
   };
 
+  public createTodo = ( req:Request, res:Response ) => {
+    
+    
+    const body = req.body;
+
+    res.json( todos );
+
+  }
 
 
 

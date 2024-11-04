@@ -26,10 +26,13 @@ export class Server {
   
   async start () {
     
+    //* Middlewares
+    this.app.use( express.json() );
+    this.app.use( express.urlencoded({ extended: true }) );
 
     this.app.use( express.static( this.publicPath ) );
 
-    this.app.use( this.routes)
+    this.app.use( this.routes );
 
     this.app.get('*', (req, res) => {
       
