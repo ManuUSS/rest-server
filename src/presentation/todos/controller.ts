@@ -1,6 +1,7 @@
 import type { Request, Response } from 'express';
 import { prisma } from '../../data/postgres';
 import { CreateTodoDto } from '../../domain/dtos';
+import { UpdateTodoDto } from '../../domain/dtos/todos/update-todo.dto';
 
 export class TodosController {
 
@@ -76,10 +77,9 @@ export class TodosController {
   public updateTodo = async ( req:Request, res:Response ) => {
   
     const id = Number( req.params.id );
-    if( isNaN( id ) ) {
-      res.status( 400 ).json({ message: 'Invalid ID supplied' });
-      return;
-    }
+    const [ error, updateTodoDto ] = UpdateTodoDto.update({ ...req.body, id });
+
+    if( error ) res.status( 400 ).json({ error });
 
     const todo = await prisma.todo.findUnique({ where: { id } });
     if( !todo ) {
@@ -87,13 +87,9 @@ export class TodosController {
       return;
     }
 
-    const { text, completedAt } = req.body;
     const updatedTodo = await prisma.todo.update({
       where: { id },
-      data: {
-        text,
-        completedAt: completedAt ? new Date( completedAt ) : null
-      }
+      data: updateTodoDto!.values
     });
 
     res.json( updatedTodo );
