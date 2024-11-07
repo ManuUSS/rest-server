@@ -32,7 +32,7 @@ export class TodoDataSourceImpl implements TodoDataSource {
 
   }
 
-  async updateById ( updateTodoDto:UpdateTodoDto ): Promise<TodoEntity | null> {
+  async updateById ( updateTodoDto:UpdateTodoDto ): Promise<TodoEntity> {
 
     await this.getById( updateTodoDto.id );
 
@@ -45,7 +45,7 @@ export class TodoDataSourceImpl implements TodoDataSource {
 
   }
   
-  async deleteById( id:number ): Promise<TodoEntity | null> {
+  async deleteById( id:number ): Promise<TodoEntity> {
 
     await this.getById( id );
     

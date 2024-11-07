@@ -16,15 +16,15 @@ export class TodoRepositoryImpl implements TodoRepository {
     return this.dataSource.getAll();
   }
 
-  getById(id: number): Promise<TodoEntity | null> {
+  getById(id: number): Promise<TodoEntity> {
     return this.dataSource.getById( id );
   }
 
-  updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity | null> {
+  updateById(updateTodoDto: UpdateTodoDto): Promise<TodoEntity> {
     return this.dataSource.updateById( updateTodoDto );
   }
 
-  deleteById(id: number): Promise<TodoEntity | null> {
+  deleteById(id: number): Promise<TodoEntity> {
     return this.dataSource.deleteById( id );
   }
 

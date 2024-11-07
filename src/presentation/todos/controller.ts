@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { prisma } from '../../data/postgres';
 import { CreateTodoDto } from '../../domain/dtos';
 import { UpdateTodoDto } from '../../domain/dtos/todos/update-todo.dto';
 import { TodoRepository, TodoUseCases } from '../../domain';
@@ -27,7 +26,6 @@ export class TodosController {
 
   /**
    * Get todo by id
-   * @async
    * @param { Request } req 
    * @param { Response } res 
    */
